@@ -1,46 +1,57 @@
 package com.example.config;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import javax.sql.DataSource;
-
 @Configuration
 public class DataSourceConfig {
 
-    @Primary
     @ConfigurationProperties("spring.datasource")
     @Bean
-    public DataSource master() {
-        return new HikariDataSource() {
-            public void setUrl(String jdbcUrl) {
-                super.setJdbcUrl(jdbcUrl);
-            }
-        };
+    public CustomDataSourceProperties masterDataSourceProperties() {
+        return new CustomDataSourceProperties();
     }
 
     @ConfigurationProperties("spring.datasource-slave1")
     @Bean
-    public DataSource slave1() {
-        return new HikariDataSource() {
-            public void setUrl(String jdbcUrl) {
-                super.setJdbcUrl(jdbcUrl);
-            }
-        };
+    public CustomDataSourceProperties slave1DataSourceProperties() {
+        return new CustomDataSourceProperties();
     }
 
     @ConfigurationProperties("spring.datasource-slave2")
     @Bean
-    public DataSource slave2() {
-        return new HikariDataSource() {
-            public void setUrl(String jdbcUrl) {
-                super.setJdbcUrl(jdbcUrl);
-            }
-        };
+    public CustomDataSourceProperties slave2DataSourceProperties() {
+        return new CustomDataSourceProperties();
+    }
+
+    @Primary
+    @Bean
+    public HikariDataSource masterDataSource(@Qualifier("masterDataSourceProperties") CustomDataSourceProperties properties) {
+        return hikariDataSource(properties);
+    }
+
+    @Bean
+    public HikariDataSource slave1DataSource(@Qualifier("slave1DataSourceProperties") CustomDataSourceProperties properties) {
+        return hikariDataSource(properties);
+    }
+
+    @Bean
+    public HikariDataSource slave2DataSource(@Qualifier("slave2DataSourceProperties") CustomDataSourceProperties properties) {
+        return hikariDataSource(properties);
+    }
+
+
+    private HikariDataSource hikariDataSource(CustomDataSourceProperties properties) {
+        HikariConfig hikari = properties.getHikari();
+        hikari.setJdbcUrl(properties.getUrl());
+        hikari.setUsername(properties.getUsername());
+        hikari.setPassword(properties.getPassword());
+        return new HikariDataSource(hikari);
     }
 
 

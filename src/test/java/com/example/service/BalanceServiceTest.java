@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,5 +59,23 @@ public class BalanceServiceTest {
                 new Balance().setId(2L).setBalance(new java.math.BigDecimal("200"))
         );
         balanceRepository.batchIncrement(balances);
+    }
+
+    @Test
+    public void testUpdateBatchByExampleSelective() {
+        BalanceExample update1 = BalanceExample.create()
+                .set("balance = balance + ?", new BigDecimal("100"))
+                .andIdEqualTo(1L);
+        BalanceExample update2 = BalanceExample.create()
+                .set("balance = balance + ?", new BigDecimal("100"))
+                .and("balance > frozen")
+                .andIdEqualTo(2L);
+        balanceRepository.updateBatchByExample(Arrays.asList(update1, update2));
+    }
+
+    @Test
+    public void sumBalance() {
+        List<Balance> balances = balanceRepository.sumBalance();
+        log.info("sum balance:{}", balances);
     }
 }

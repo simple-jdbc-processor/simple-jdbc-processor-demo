@@ -49,4 +49,22 @@ public class BalanceRepository extends BalanceSimpleJdbcRepository {
         }
         return updateBatch(sql, params);
     }
+
+    public List<Balance> sumBalance() {
+        BalanceExample query = BalanceExample.create()
+                .aggregate("id", "sum(balance) as c", "sum(frozen)")
+                .andIdEqualTo(1L)
+                .groupBy(BalanceExample.Column.id)
+                .having("c > 1")
+                .limit(0, 10);
+        return aggregate(query, rs -> {
+            Long id = rs.getLong(1);
+            BigDecimal balance = rs.getBigDecimal(2);
+            BigDecimal frozen = rs.getBigDecimal(3);
+            return new Balance()
+                    .setId(id)
+                    .setBalance(balance == null ? BigDecimal.ZERO : balance)
+                    .setFrozen(frozen == null ? BigDecimal.ZERO : frozen);
+        });
+    }
 }

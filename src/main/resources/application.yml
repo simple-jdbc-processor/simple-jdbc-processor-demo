@@ -3,7 +3,7 @@ server:
   shutdown: graceful
 spring:
   application:
-    name: simple-jdbc-demo2
+    name: simple-jdbc-demo
   datasource:
     url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
     username: root
@@ -38,6 +38,7 @@ spring:
       repositories:
         enabled: false
       port: 6379
+
 
 logging:
   level:
