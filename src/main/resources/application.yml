@@ -1,0 +1,46 @@
+server:
+  port: 8080
+  shutdown: graceful
+spring:
+  application:
+    name: simple-jdbc-demo2
+  datasource:
+    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: rootpassword
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      max-lifetime: 1800000
+  datasource-slave1:
+    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: rootpassword
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      max-lifetime: 1800000
+  datasource-slave2:
+    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: rootpassword
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      max-lifetime: 1800000
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+    default-property-inclusion: NON_NULL
+  data:
+    redis:
+      host: localhost
+      repositories:
+        enabled: false
+      port: 6379
+
+logging:
+  level:
+    root: info
+    com.example.repository: debug
+
