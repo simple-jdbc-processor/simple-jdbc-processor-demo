@@ -50,10 +50,10 @@ public class BalanceRepository extends BalanceSimpleJdbcRepository {
         return updateBatch(sql, params);
     }
 
-    public List<Balance> sumBalance() {
+    public List<Balance> sumBalance(Long userId) {
         BalanceExample query = BalanceExample.create()
                 .aggregate("id", "sum(balance) as c", "sum(frozen)")
-                .andIdEqualTo(1L)
+                .andIdEqualTo(userId)
                 .groupBy(BalanceExample.Column.id)
                 .having("c > 1")
                 .limit(0, 10);
