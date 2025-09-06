@@ -36,6 +36,9 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
      */
     @Override
     public String encodeUsername(String value) {
+        if (value == null) {
+            return null;
+        }
         return Base64.getEncoder().encodeToString(value.getBytes());
     }
 
@@ -51,6 +54,9 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
     @Override
     public void decodeUsername(ResultSet resultSet, User t, String column, Class<String> targetType) throws SQLException {
         String value = resultSet.getObject(column, String.class);
+        if (value == null) {
+            return;
+        }
         t.setUsername(new String(Base64.getDecoder().decode(value.getBytes())));
     }
 }

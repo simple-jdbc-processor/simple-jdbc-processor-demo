@@ -127,6 +127,7 @@ public class ContentServiceTest {
         assertEquals(new BigDecimal("200"), insertedContent.getAmount());
         
         log.info("testInsert 测试通过");
+        contentRepository.deleteByPrimaryKey(newContentId);
     }
 
     @Test

@@ -16,17 +16,13 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
 @Transactional
-@Rollback
 @Slf4j
 public class UserServiceTest {
 
@@ -57,7 +53,7 @@ public class UserServiceTest {
     void tearDown() {
         log.info("Tearing down test data");
         // 清理测试过程中创建的数据
-        clearTestData();
+//        clearTestData();
     }
 
     private void clearTestData() {
@@ -227,10 +223,41 @@ public class UserServiceTest {
         Date now = new Date();
         user.setCreateTime(now);
         user.setUpdateTime(now);
-        
+
         userRepository.insertSelective(user);
         createdUserIds.add(user.getId());
-        
+
         return user;
+    }
+
+    @Test
+    public void testInsertBatch() {
+        Date now = new Date();
+        log.info("Executing testInsertBatch");
+        User user = new User();
+        user.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
+        user.setPassword(TEST_PASSWORD);
+        user.setNickname(TEST_NICKNAME);
+        user.setStatus(UserStatus.NORMAL);
+        user.setCreateTime(now);
+        user.setUpdateTime(now);
+        user.setId(1L);
+        User user2 = new User();
+        user2.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
+        user2.setPassword(TEST_PASSWORD);
+        user2.setNickname(TEST_NICKNAME);
+        user2.setStatus(UserStatus.NORMAL);
+        user2.setCreateTime(now);
+        user2.setUpdateTime(now);
+        user2.setId(2L);
+        User user3 = new User();
+        user3.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
+        user3.setPassword(TEST_PASSWORD);
+        user3.setNickname(TEST_NICKNAME);
+        user3.setStatus(UserStatus.NORMAL);
+        user3.setCreateTime(now);
+        user3.setUpdateTime(now);
+        userRepository.insertBatch(Arrays.asList(user, user2, user3));
+        userRepository.deleteByPrimaryKeys(Arrays.asList(user.getId(), user2.getId(), user3.getId()));
     }
 }
