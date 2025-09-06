@@ -86,7 +86,7 @@ CREATE TABLE `tb_user` (
 ```
 
 ES表结构创建
-```Elasticsearch
+```
 PUT /product
 {
   "settings": {
@@ -149,7 +149,7 @@ PUT /product
 2. 运行生成的 JAR 文件：
 
 ```bash
-java -jar target/simple-jdbc-demo2-0.0.1-SNAPSHOT.jar
+java -jar target/app.jar
 ```
 
 ## 测试
