@@ -5,7 +5,7 @@ spring:
   application:
     name: simple-jdbc-demo
   datasource:
-    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: rootpassword
     hikari:
@@ -13,7 +13,7 @@ spring:
       maximum-pool-size: 10
       max-lifetime: 1800000
   datasource-slave1:
-    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: rootpassword
     hikari:
@@ -21,7 +21,7 @@ spring:
       maximum-pool-size: 10
       max-lifetime: 1800000
   datasource-slave2:
-    url: jdbc:mysql://localhost/demo?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: rootpassword
     hikari:
@@ -38,8 +38,10 @@ spring:
       repositories:
         enabled: false
       port: 6379
-
-
+    mongodb:
+      uri: mongodb://root:rootpassword@localhost:27017/simple_db?authSource=admin
+  elasticsearch:
+    uris: http://localhost:9200
 logging:
   level:
     root: info
