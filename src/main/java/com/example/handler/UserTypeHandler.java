@@ -52,7 +52,7 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
      * @throws SQLException 数据库异常
      */
     @Override
-    public void decodeUsername(ResultSet resultSet, User t, String column, Class<String> targetType) throws SQLException {
+    public void decodeUsername(ResultSet resultSet, User t, String column, int index, Class<String> targetType) throws SQLException {
         String value = resultSet.getObject(column, String.class);
         if (value == null) {
             return;
