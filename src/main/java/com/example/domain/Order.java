@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 
 @SimpleJdbc(shardTable = true, //启用分表
-        slaveDataSources = {"datasource-slave1", "datasource-slave2"} //读写分离
+        slaveDataSources = {"slave1DataSource", "slave2DataSource"} //读写分离
 )
 @Getter
 @Setter
