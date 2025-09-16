@@ -6,10 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @SimpleJdbc(shardTable = true, //启用分表
-        slaveDataSources = {"slave1DataSource", "slave2DataSource"} //读写分离
+        slaveDataSources = {"slave1DataSource", "slave2DataSource"}, //读写分离,
+        auditSql = true
 )
 @Getter
 @Setter

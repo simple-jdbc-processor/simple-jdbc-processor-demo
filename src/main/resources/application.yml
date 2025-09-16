@@ -1,19 +1,24 @@
 server:
   port: 8080
   shutdown: graceful
+  tomcat:
+    threads:
+      virtual:
+        enabled: true
+
 spring:
   application:
     name: simple-jdbc-demo
   datasource:
-    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
+    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
     username: root
     password: rootpassword
     hikari:
       minimum-idle: 5
-      maximum-pool-size: 10
+      maximum-pool-size: 100
       max-lifetime: 1800000
   datasource-slave1:
-    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
+    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
     username: root
     password: rootpassword
     hikari:
@@ -21,7 +26,7 @@ spring:
       maximum-pool-size: 10
       max-lifetime: 1800000
   datasource-slave2:
-    url: jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true
+    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
     username: root
     password: rootpassword
     hikari:

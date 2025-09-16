@@ -56,7 +56,7 @@ public class BalanceRepository extends BalanceSimpleJdbcRepository {
                 .andIdEqualTo(userId)
                 .groupBy(BalanceExample.Column.id)
                 .having("c > 1")
-                .limit(0, 10);
+                .limit(10);
         return aggregate(query, rs -> {
             Long id = rs.getLong(1);
             BigDecimal balance = rs.getBigDecimal(2);

@@ -59,4 +59,18 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
         }
         t.setUsername(new String(Base64.getDecoder().decode(value.getBytes())));
     }
+
+    /**
+     * 自定义主键生成策略.
+     */
+    @Override
+    public void generatePrimaryKey(User t) {
+    }
+
+    /**
+     * 批量自定义主键生成策略.
+     */
+    @Override
+    public void batchGeneratePrimaryKey(List<User> ts) {
+    }
 }

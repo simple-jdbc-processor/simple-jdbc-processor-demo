@@ -92,6 +92,95 @@ services:
       - "5601:5601"
     networks:
       - app-network
+  # MySQL 数据库（Apollo 存储配置的元数据）
+  apollo-mysql:
+    image: mysql:8.0
+    container_name: apollo-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # 数据库root密码
+      MYSQL_DATABASE: ApolloConfigDB  # Apollo配置数据库
+      MYSQL_USER: apollo
+      MYSQL_PASSWORD: apollo
+    volumes:
+      # 初始化SQL脚本（Apollo官方提供）
+      - ./sql:/docker-entrypoint-initdb.d
+      # 持久化数据
+      - apollo-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - apollo-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Config Service（提供配置获取接口）
+  apollo-configservice:
+    image: apolloconfig/apollo-configservice:2.1.0
+    container_name: apollo-configservice
+    restart: always
+    depends_on:
+      apollo-mysql:
+        condition: service_healthy
+    environment:
+      # 数据库连接信息
+      SPRING_DATASOURCE_URL: jdbc:mysql://apollo-mysql:3306/ApolloConfigDB?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: apollo
+      SPRING_DATASOURCE_PASSWORD: apollo
+      # 服务端口
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - apollo-network
+
+  # Admin Service（提供配置管理接口）
+  apollo-adminservice:
+    image: apolloconfig/apollo-adminservice:2.1.0
+    container_name: apollo-adminservice
+    restart: always
+    depends_on:
+      apollo-mysql:
+        condition: service_healthy
+    environment:
+      # 数据库连接信息
+      SPRING_DATASOURCE_URL: jdbc:mysql://apollo-mysql:3306/ApolloConfigDB?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: apollo
+      SPRING_DATASOURCE_PASSWORD: apollo
+      # 服务端口
+      SERVER_PORT: 8090
+      # 指向Config Service地址
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://apollo-configservice:8080/eureka/
+    ports:
+      - "8090:8090"
+    networks:
+      - apollo-network
+
+  # Portal（Web管理界面）
+  apollo-portal:
+    image: apolloconfig/apollo-portal:2.1.0
+    container_name: apollo-portal
+    restart: always
+    depends_on:
+      - apollo-adminservice
+    environment:
+      # Portal自身数据库（如需多环境管理需配置）
+      SPRING_DATASOURCE_URL: jdbc:mysql://apollo-mysql:3306/ApolloPortalDB?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: apollo
+      SPRING_DATASOURCE_PASSWORD: apollo
+      # 服务端口
+      SERVER_PORT: 8070
+      # 配置环境信息（DEV/FAT/UAT/PRO）
+      APOLLO_PORTAL_ENVS: dev
+      # 各环境Admin Service地址（key为环境名，value为服务地址）
+      DEV_META: http://apollo-configservice:8080
+    ports:
+      - "8070:8070"
+    networks:
+      - apollo-network
 
 networks:
   app-network:
