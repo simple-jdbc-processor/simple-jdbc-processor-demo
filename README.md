@@ -19,11 +19,13 @@
 项目采用了基于用户 ID 的分表策略，通过 `getTableName` 方法根据用户 ID 计算具体的表名。
 
 ### 组件服务包含
+- **Java**：25版
+- **Maven**：3.9.12
 - **MySQL**：主数据库，端口 3306
 - **Redis**：缓存服务，端口 6379
 - **MongoDB**：文档数据库，端口 27017
-- **Elasticsearch**：搜索引擎，端口 9200 和 9300
-- **Kibana**：Elasticsearch 可视化工具，端口 5601
+- **Elasticsearch**：9.x 搜索引擎，端口 9200 和 9300
+- **Kibana**：9.x Elasticsearch 可视化工具，端口 5601
 
 ### 使用方法
 1. 确保已安装 Docker 和 Docker Compose

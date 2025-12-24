@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>4.0.1</version>
         <relativePath/>
     </parent>
 
@@ -17,10 +17,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <java.version>21</java.version>
-        <spring-cloud.version>2025.0.0</spring-cloud.version>
-        <spring-boot.version>3.5.6</spring-boot.version>
-        <simple-jdbc-processor.version>1.1.2</simple-jdbc-processor.version>
+        <java.version>25</java.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <spring-boot.version>4.0.1</spring-boot.version>
+        <simple-jdbc-processor.version>1.1.9</simple-jdbc-processor.version>
         <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
@@ -40,10 +40,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,6 +69,14 @@
             <groupId>io.github.simple-jdbc-processor</groupId>
             <artifactId>simple-elasticsearch-processor-starter</artifactId>
             <version>${simple-jdbc-processor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
