@@ -1,7 +1,7 @@
 services:
   # MySQL 服务
   mysql:
-    image: mysql:8.0
+    image: mysql:9.5.0
     container_name: mysql-service
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword  # 根密码
@@ -10,7 +10,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql        # 数据持久化
+      - mysql-data2:/var/lib/mysql        # 数据持久化
     networks:
       - app-network
     healthcheck:
@@ -21,13 +21,13 @@ services:
 
   # Redis 服务
   redis:
-    image: redis:7.0-alpine
+    image: redis:8.4.0
     container_name: redis-service
     command: redis-server --requirepass redispassword --appendonly yes  # 启用密码和持久化
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data                 # 数据持久化
+      - redis-data2:/data                 # 数据持久化
     networks:
       - app-network
     healthcheck:
@@ -38,7 +38,7 @@ services:
 
   # MongoDB 服务
   mongodb:
-    image: mongo:8.0.12
+    image: mongo:8.2.3
     container_name: mongodb-service
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -47,7 +47,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodb-data:/data/db            # 数据持久化
+      - mongodb-data2:/data/db            # 数据持久化
     networks:
       - app-network
     healthcheck:
@@ -69,7 +69,7 @@ services:
       - "9200:9200"                     # HTTP 端口
       - "9300:9300"                     # 节点间通信端口
     volumes:
-      - elasticsearch-data9:/usr/share/elasticsearch/data  # 数据持久化
+      - elasticsearch-data2:/usr/share/elasticsearch/data  # 数据持久化
     networks:
       - app-network
     healthcheck:
@@ -98,7 +98,7 @@ networks:
 
 
 volumes:
-  mysql-data:
-  redis-data:
-  mongodb-data:
-  elasticsearch-data9:
+  mysql-data2:
+  redis-data2:
+  mongodb-data2:
+  elasticsearch-data2:
