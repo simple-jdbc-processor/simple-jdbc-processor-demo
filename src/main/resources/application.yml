@@ -5,25 +5,25 @@ spring:
   application:
     name: simple-jdbc-demo
   datasource:
-    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
+    url: "jdbc:mysql://localhost:3306/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048&useLocalSessionState=true&cacheResultSetMetadata=true&cacheServerConfiguration=true&elideSetAutoCommits=true&maintainTimeStats=false"
     username: root
-    password: bitnami
+    password: rootpassword
     hikari:
       minimum-idle: 5
       maximum-pool-size: 100
       max-lifetime: 1800000
   datasource-slave1:
-    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
+    url: "jdbc:mysql://localhost:3306/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048&useLocalSessionState=true&cacheResultSetMetadata=true&cacheServerConfiguration=true&elideSetAutoCommits=true&maintainTimeStats=false"
     username: root
-    password: bitnami
+    password: rootpassword
     hikari:
       minimum-idle: 5
       maximum-pool-size: 10
       max-lifetime: 1800000
   datasource-slave2:
-    url: "jdbc:mysql://localhost/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048"
+    url: "jdbc:mysql://localhost:3306/simple_db?useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048&useLocalSessionState=true&cacheResultSetMetadata=true&cacheServerConfiguration=true&elideSetAutoCommits=true&maintainTimeStats=false"
     username: root
-    password: bitnami
+    password: rootpassword
     hikari:
       minimum-idle: 5
       maximum-pool-size: 10
@@ -41,7 +41,7 @@ spring:
 # 3.x   mongodb:
 #      uri: mongodb://root:bitnami@localhost:27017/simple_db?authSource=admin
   mongodb:
-    uri: mongodb://root:bitnami@localhost:27017/simple_db?authSource=admin
+    uri: mongodb://root:rootpassword@localhost:27017/simple_db?authSource=admin
   elasticsearch:
     uris: http://localhost:9200
     socket-keep-alive: true
