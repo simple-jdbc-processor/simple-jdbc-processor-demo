@@ -1,0 +1,104 @@
+services:
+  # MySQL 服务
+  mysql:
+    image: mysql:9.5.0
+    container_name: mysql-service
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # 根密码
+      MYSQL_DATABASE: simple_db              # 初始化数据库名
+      TZ: Asia/Shanghai                  # 时区设置
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data2:/var/lib/mysql        # 数据持久化
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 服务
+  redis:
+    image: redis:8.4.0
+    container_name: redis-service
+    command: redis-server --requirepass redispassword --appendonly yes  # 启用密码和持久化
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data2:/data                 # 数据持久化
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redispassword", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB 服务
+  mongodb:
+    image: mongo:8.2.3
+    container_name: mongodb-service
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      TZ: Asia/Shanghai
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data2:/data/db            # 数据持久化
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--username", "root", "--password", "rootpassword", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Elasticsearch 服务
+  elasticsearch:
+    image: elasticsearch:9.2.3
+    container_name: elasticsearch-service
+    environment:
+      - discovery.type=single-node       # 单节点模式
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # 内存设置
+      - xpack.security.enabled=false    # 关闭安全验证（开发环境）
+      - TZ=Asia/Shanghai
+    ports:
+      - "9200:9200"                     # HTTP 端口
+      - "9300:9300"                     # 节点间通信端口
+    volumes:
+      - elasticsearch-data2:/usr/share/elasticsearch/data  # 数据持久化
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Kibana（Elasticsearch 可视化工具，可选）
+  kibana:
+    image: kibana:9.2.3
+    container_name: kibana-service
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - TZ=Asia/Shanghai
+    ports:
+      - "5601:5601"
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+
+
+volumes:
+  mysql-data2:
+  redis-data2:
+  mongodb-data2:
+  elasticsearch-data2:
