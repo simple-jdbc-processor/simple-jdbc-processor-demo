@@ -20,7 +20,7 @@
         <java.version>25</java.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
         <spring-boot.version>4.0.1</spring-boot.version>
-        <simple-jdbc-processor.version>1.2.0</simple-jdbc-processor.version>
+        <simple-jdbc-processor.version>1.2.2-SNAPSHOT</simple-jdbc-processor.version>
         <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
@@ -92,6 +92,13 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.27</version>
+        </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>1.12.797</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
