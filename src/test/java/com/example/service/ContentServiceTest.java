@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +52,7 @@ public class ContentServiceTest {
         ContentExample deleteExample = ContentExample.create()
                 .andIdIn(Arrays.asList(TEST_CONTENT_ID_1, TEST_CONTENT_ID_2));
         contentRepository.deleteByExample(deleteExample);
-        
+
         // 准备测试数据
         Content content1 = new Content()
                 .setId(TEST_CONTENT_ID_1)
@@ -73,7 +72,7 @@ public class ContentServiceTest {
                 .setAmount(TEST_AMOUNT)
                 .setCreateTime(new Date())
                 .setUpdateTime(LocalDateTime.now());
-        
+
         contentRepository.insert(content1);
         contentRepository.insert(content2);
         log.info("测试数据准备完成");
@@ -92,13 +91,13 @@ public class ContentServiceTest {
     void testSelectByPrimaryKey() {
         // 执行操作
         Content content = contentRepository.selectByPrimaryKey(TEST_CONTENT_ID_1);
-        
+
         // 验证结果
         assertNotNull(content, "查询到的内容记录不应为空");
         assertEquals(TEST_CONTENT_ID_1, content.getId());
         assertEquals(TEST_NAME_1, content.getName());
         assertEquals(TEST_TITLE, content.getTitle());
-        
+
         log.info("testSelectByPrimaryKey 测试通过");
     }
 
@@ -115,17 +114,17 @@ public class ContentServiceTest {
                 .setAmount(new BigDecimal("200"))
                 .setCreateTime(new Date())
                 .setUpdateTime(LocalDateTime.now());
-        
+
         // 执行操作
         contentRepository.insert(newContent);
-        
+
         // 验证数据是否正确插入
         Content insertedContent = contentRepository.selectByPrimaryKey(newContentId);
         assertNotNull(insertedContent, "插入的内容记录应存在");
         assertEquals(newContentId, insertedContent.getId());
         assertEquals("wangwu", insertedContent.getName());
         assertEquals(new BigDecimal("200"), insertedContent.getAmount());
-        
+
         log.info("testInsert 测试通过");
         contentRepository.deleteByPrimaryKey(newContentId);
     }
@@ -136,20 +135,20 @@ public class ContentServiceTest {
         ContentExample query = ContentExample.create()
                 .andAgeEqualTo(TEST_AGE)
                 .limit(2);
-        
+
         // 执行操作
         List<Content> contents = contentRepository.selectByExample(query);
-        
+
         // 验证结果
         assertNotNull(contents, "查询结果不应为空");
         assertFalse(contents.isEmpty(), "查询应返回至少一条记录");
         assertEquals(2, contents.size(), "查询应返回2条记录");
-        
+
         // 验证每条记录的年龄是否符合条件
         for (Content content : contents) {
             assertEquals(TEST_AGE, content.getAge());
         }
-        
+
         log.info("testSelectByExample 测试通过");
     }
 
@@ -159,15 +158,15 @@ public class ContentServiceTest {
         ContentExample query = ContentExample.create()
                 .desc("_id")
                 .limit(1);
-        
+
         // 执行操作
         List<Content> contents = contentRepository.selectByExample(query);
-        
+
         // 验证结果
         assertNotNull(contents, "查询结果不应为空");
         assertFalse(contents.isEmpty(), "查询应返回至少一条记录");
         assertEquals(1, contents.size(), "查询应返回1条记录");
-        
+
         log.info("testSelectByExampleWithSort 测试通过");
     }
 
@@ -176,18 +175,18 @@ public class ContentServiceTest {
         // 准备查询条件
         ContentExample query = ContentExample.create()
                 .andNameEqualTo(TEST_NAME_2);
-        
+
         // 执行操作
         int result = contentRepository.incrementByExample(query, "age", INCREMENT_VALUE);
-        
+
         // 验证结果
         assertEquals(1, result, "更新操作应返回1表示成功");
-        
+
         // 验证值是否正确增加
         Content updatedContent = contentRepository.selectByPrimaryKey(TEST_CONTENT_ID_2);
         Integer expectedAge = TEST_AGE + INCREMENT_VALUE;
         assertEquals(expectedAge, updatedContent.getAge());
-        
+
         log.info("testIncrement 测试通过");
     }
 
@@ -195,14 +194,14 @@ public class ContentServiceTest {
     void testDeleteByPrimaryKey() {
         // 执行操作
         int result = contentRepository.deleteByPrimaryKey(TEST_CONTENT_ID_1);
-        
+
         // 验证结果
         assertEquals(1, result, "删除操作应返回1表示成功");
-        
+
         // 验证数据是否已删除
         Content deletedContent = contentRepository.selectByPrimaryKey(TEST_CONTENT_ID_1);
         assertNull(deletedContent, "删除的记录不应存在");
-        
+
         log.info("testDeleteByPrimaryKey 测试通过");
     }
 
@@ -210,10 +209,10 @@ public class ContentServiceTest {
     void testSelectNonExistentContent() {
         // 尝试查询不存在的内容
         Content content = contentRepository.selectByPrimaryKey(-999L);
-        
+
         // 验证结果
         assertNull(content, "查询不存在的内容应返回null");
-        
+
         log.info("testSelectNonExistentContent 测试通过");
     }
 
@@ -222,19 +221,19 @@ public class ContentServiceTest {
         // 准备删除条件
         ContentExample deleteExample = ContentExample.create()
                 .andAgeEqualTo(TEST_AGE);
-        
+
         // 执行操作
         int result = contentRepository.deleteByExample(deleteExample);
-        
+
         // 验证结果
         assertTrue(result >= 1, "删除操作应返回至少1表示成功");
-        
+
         // 验证数据是否已删除
         ContentExample queryExample = ContentExample.create()
                 .andAgeEqualTo(TEST_AGE);
         List<Content> remainingContents = contentRepository.selectByExample(queryExample);
         assertTrue(remainingContents.isEmpty(), "符合条件的记录应全部删除");
-        
+
         log.info("testDeleteByExample 测试通过");
     }
 }

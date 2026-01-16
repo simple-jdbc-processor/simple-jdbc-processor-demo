@@ -15,7 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
 
+import javax.persistence.Column;
 import javax.persistence.Table;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class PhotoRepositoryTest {
         if (listTablesResponse.tableNames().contains(tableName)) {
             return;
         }
+
         KeySchemaElement rangeKey = KeySchemaElement.builder()
                 .attributeName("id")
                 .keyType(KeyType.RANGE)

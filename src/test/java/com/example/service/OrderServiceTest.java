@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.Application;
 import com.example.domain.Order;
 import com.example.domain.OrderExample;
+import com.example.domain.Product;
 import com.example.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -13,9 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,6 +45,9 @@ public class OrderServiceTest {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private DataSource dataSource;
+
     // 测试数据
     private static final Long TEST_USER_ID_1 = 1L;
     private static final Long TEST_USER_ID_2 = 2L;
@@ -48,7 +60,12 @@ public class OrderServiceTest {
     private List<Long> testOrderIds = new ArrayList<>();
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException, SQLException {
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
+             InputStream in = Product.class.getClassLoader().getResourceAsStream("sql/demo.sql")) {
+            statement.execute(StreamUtils.copyToString(in, StandardCharsets.UTF_8));
+        }
         idGenerator = new AtomicLong(System.nanoTime());
         testOrderIds.clear();
         

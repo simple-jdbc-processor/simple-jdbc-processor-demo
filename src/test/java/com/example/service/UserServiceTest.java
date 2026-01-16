@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.Application;
+import com.example.domain.Product;
 import com.example.domain.User;
 import com.example.domain.UserExample;
 import com.example.enums.UserStatus;
@@ -15,7 +16,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +52,13 @@ public class UserServiceTest {
     private final List<Long> createdUserIds = new ArrayList<>();
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException, IOException {
+        DataSource dataSource = userRepository.getDataSource();
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
+             InputStream in = Product.class.getClassLoader().getResourceAsStream("sql/demo.sql")) {
+            statement.execute(StreamUtils.copyToString(in, StandardCharsets.UTF_8));
+        }
         log.info("Setting up test data");
         // 确保测试环境清洁
         clearTestData();
