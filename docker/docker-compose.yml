@@ -92,6 +92,16 @@ services:
       - "5601:5601"
     networks:
       - app-network
+  dynamodb:
+    image: amazon/dynamodb-local
+    container_name: dynamodb
+    ports:
+      - "8000:8000"
+    #    volumes:
+    #      - dynamodb-data:/data/db
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
