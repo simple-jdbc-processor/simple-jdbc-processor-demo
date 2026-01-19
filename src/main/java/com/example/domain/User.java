@@ -9,6 +9,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Map;
 
 @SimpleJdbc(
         dialect = DialectEnums.MYSQL,
@@ -64,6 +66,12 @@ public class User {
      */
     @Column(name = "update_time", columnDefinition = "TIMESTAMP", nullable = false)
     private java.util.Date updateTime;
+
+    /**
+     * 更新时间.
+     */
+    @Column(name = "tags", columnDefinition = "VARCHAR", nullable = false)
+    private List<String> tags;
 
 
 }

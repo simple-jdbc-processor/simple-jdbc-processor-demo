@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.Application;
 import com.example.domain.Photo;
 import com.example.domain.PhotoExample;
+import com.example.domain.PhotoSimpleJdbcDefaultTypeHandler;
 import com.example.repository.PhotoRepository;
 import io.github.simple.dynamodb.processor.KeyPair;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.util.TypeUtils;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
@@ -18,8 +20,12 @@ import software.amazon.awssdk.services.dynamodb.model.*;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
@@ -31,6 +37,9 @@ public class PhotoRepositoryTest {
 
     @Autowired
     private DynamoDbClient dynamoDbClient;
+
+    @Autowired
+    private PhotoService photoService;
 
 
     @BeforeEach
@@ -77,20 +86,31 @@ public class PhotoRepositoryTest {
         Photo photo = new Photo()
                 .setId(1L)
                 .setUserId("user1")
-                .setPhotoUrl("https://example.com/photo.jpg");
+                .setPhotoUrl("https://example.com/photo.jpg")
+                .setTags(Arrays.asList("tag1", "tag2"))
+                .setMetadata(new HashMap<>());
         photoRepository.insert(photo);
     }
 
     @Test
     public void testInsertBatch() {
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("key1", "value1");
+        metadata.put("key2", "value2");
+        metadata.put("key3", "value3");
+
         Photo photo1 = new Photo()
                 .setId(2L)
                 .setUserId("user2")
-                .setPhotoUrl("https://example.com/photo.jpg");
+                .setPhotoUrl("https://example.com/photo.jpg")
+                .setTags(Arrays.asList("tag1", "tag2"))
+                .setMetadata(metadata);
         Photo photo2 = new Photo()
                 .setId(3L)
                 .setUserId("user3")
-                .setPhotoUrl("https://example.com/photo.jpg");
+                .setPhotoUrl("https://example.com/photo.jpg")
+                .setTags(Arrays.asList("tag1", "tag2"))
+                .setMetadata(metadata);
         photoRepository.insertBatch(Arrays.asList(photo1, photo2));
     }
 
@@ -104,8 +124,8 @@ public class PhotoRepositoryTest {
 
     @Test
     public void testSelectByPrimaryKeys() {
-        KeyPair keyPair1 = new KeyPair("user1", 2L);
-        KeyPair keyPair2 = new KeyPair("user1", 3L);
+        KeyPair keyPair1 = new KeyPair("user1", 1L);
+        KeyPair keyPair2 = new KeyPair("user2", 2L);
 
         List<Photo> photo = photoRepository.selectByPrimaryKeys(Arrays.asList(keyPair1, keyPair2));
         log.info("photo: {}", photo);
@@ -151,7 +171,7 @@ public class PhotoRepositoryTest {
 
     @Test
     public void testDeleteByPrimaryKeys() {
-        photoRepository.deleteByPrimaryKeys(
+        photoService.deleteByPrimaryKeys(
                 Arrays.asList(
                         new KeyPair("user1", 1L),
                         new KeyPair("user2", 2L),
@@ -159,5 +179,26 @@ public class PhotoRepositoryTest {
                 )
         );
     }
+
+    @Test
+    public void testSelectOrderBy() {
+
+        Photo photo1 = new Photo()
+                .setId(10L)
+                .setUserId("user_order")
+                .setPhotoUrl("https://example.com/photo.jpg");
+        Photo photo2 = new Photo()
+                .setId(11L)
+                .setUserId("user_order")
+                .setPhotoUrl("https://example.com/photo.jpg");
+        photoRepository.insertBatch(Arrays.asList(photo1, photo2));
+
+        PhotoExample photoExample = new PhotoExample()
+                .andUserIdEqualTo("user_order")
+                .desc();
+        List<Photo> photos = photoRepository.selectByExample(photoExample);
+        log.info("photos: {}", photos);
+    }
+
 
 }

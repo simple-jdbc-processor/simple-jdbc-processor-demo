@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,6 +61,25 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
         t.setUsername(new String(Base64.getDecoder().decode(value.getBytes())));
     }
 
+    @Override
+    public Object encodeTags(List<String> value) {
+        return String.join(",", value);
+    }
+
+    @Override
+    public List<Object> encodeTagsList(List<List<String>> values) {
+        return values.stream().map(this::encodeTags).collect(Collectors.toList());
+    }
+
+    @Override
+    public void decodeTags(ResultSet resultSet, User t, String column, int index) throws SQLException {
+        String tagList = resultSet.getString(column);
+        if (tagList == null) {
+            return;
+        }
+        t.setTags(Arrays.asList(tagList.split(",")));
+    }
+
     /**
      * 自定义主键生成策略.
      */
@@ -73,4 +93,5 @@ public class UserTypeHandler extends UserSimpleJdbcDefaultTypeHandler {
     @Override
     public void batchGeneratePrimaryKey(List<User> ts) {
     }
+
 }

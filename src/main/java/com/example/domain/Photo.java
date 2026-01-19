@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.util.List;
+import java.util.Map;
 
 @SimpleJdbc(dialect = DialectEnums.DYNAMODB)
 @Data
@@ -24,4 +26,9 @@ public class Photo {
     @Column(name = "photoUrl", columnDefinition = DynamodbColumnDefinition.ATTRIBUTE)
     private String photoUrl;
 
+    @Column(name = "tags", columnDefinition = DynamodbColumnDefinition.ATTRIBUTE)
+    private List<String> tags;
+
+    @Column(name = "metadata", columnDefinition = DynamodbColumnDefinition.ATTRIBUTE)
+    private Map<String, String> metadata;
 }

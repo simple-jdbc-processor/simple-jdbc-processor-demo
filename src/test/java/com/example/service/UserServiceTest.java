@@ -88,6 +88,7 @@ public class UserServiceTest {
         user.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
         user.setPassword(TEST_PASSWORD);
         user.setNickname(TEST_NICKNAME);
+        user.setTags(Arrays.asList("tag1", "tag2"));
         user.setStatus(UserStatus.NORMAL);
         Date now = new Date();
         user.setCreateTime(now);
@@ -234,6 +235,7 @@ public class UserServiceTest {
         user.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
         user.setPassword(TEST_PASSWORD);
         user.setNickname(TEST_NICKNAME);
+        user.setTags(Arrays.asList("tag1", "tag2"));
         user.setStatus(UserStatus.NORMAL);
         Date now = new Date();
         user.setCreateTime(now);
@@ -253,6 +255,7 @@ public class UserServiceTest {
         user.setUsername(TEST_USERNAME + "_" + UUID.randomUUID().toString().substring(0, 8));
         user.setPassword(TEST_PASSWORD);
         user.setNickname(TEST_NICKNAME);
+        user.setTags(Arrays.asList("tag1", "tag2"));
         user.setStatus(UserStatus.NORMAL);
         user.setCreateTime(now);
         user.setUpdateTime(now);
@@ -262,6 +265,7 @@ public class UserServiceTest {
         user2.setPassword(TEST_PASSWORD);
         user2.setNickname(TEST_NICKNAME);
         user2.setStatus(UserStatus.NORMAL);
+        user2.setTags(Arrays.asList("tag3", "tag4"));
         user2.setCreateTime(now);
         user2.setUpdateTime(now);
         user2.setId(2L);
@@ -270,6 +274,7 @@ public class UserServiceTest {
         user3.setPassword(TEST_PASSWORD);
         user3.setNickname(TEST_NICKNAME);
         user3.setStatus(UserStatus.NORMAL);
+        user3.setTags(Arrays.asList("tag5", "tag6"));
         user3.setCreateTime(now);
         user3.setUpdateTime(now);
         userRepository.insertBatch(Arrays.asList(user, user2, user3));
