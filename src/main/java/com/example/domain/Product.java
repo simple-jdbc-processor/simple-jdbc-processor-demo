@@ -9,28 +9,26 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 /**
  * ElasticSearch Index.
  */
-@SimpleJdbc(dialect = DialectEnums.ELASTICSEARCH_V9)
+@SimpleJdbc(
+        tableName = "product",
+        tablePrimaryKey = "id", // 指定主键
+        dialect = DialectEnums.ELASTICSEARCH_V9
+)
 @Getter
 @Setter
 @ToString
 @Accessors(chain = true)
-@Table(name = "product") // indexName
 public class Product {
 
-    /**
-     * @Id 标记主键.
-     */
-    @Id
+
+    @JsonProperty
     private Long id;
 
     @JsonProperty

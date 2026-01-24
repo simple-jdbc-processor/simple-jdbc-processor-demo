@@ -3,7 +3,9 @@ package com.example.domain;
 import io.github.simple.dynamodb.processor.DynamodbColumnDefinition;
 import io.github.simple.jdbc.processor.SimpleJdbc;
 import io.github.simple.jdbc.processor.domain.DialectEnums;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
@@ -12,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 @SimpleJdbc(dialect = DialectEnums.DYNAMODB)
-@Data
+@Getter
+@Setter
+@ToString
 @Accessors(chain = true)
 @Table(name = "photo")
 public class Photo {

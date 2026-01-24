@@ -112,6 +112,7 @@ public class ContentServiceTest {
                 .setAge(20)
                 .setContent("新内容")
                 .setAmount(new BigDecimal("200"))
+                .setTags(Arrays.asList("tag1", "tag2"))
                 .setCreateTime(new Date())
                 .setUpdateTime(LocalDateTime.now());
 
@@ -126,7 +127,7 @@ public class ContentServiceTest {
         assertEquals(new BigDecimal("200"), insertedContent.getAmount());
 
         log.info("testInsert 测试通过");
-        contentRepository.deleteByPrimaryKey(newContentId);
+//        contentRepository.deleteByPrimaryKey(newContentId);
     }
 
     @Test

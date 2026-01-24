@@ -6,28 +6,30 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * Mongodb collection.
  */
-@SimpleJdbc(dataSource = "simple_db", dialect = DialectEnums.MONGO)
+@SimpleJdbc(dataSource = "simple_db", tableName = "content", dialect = DialectEnums.MONGO)
 @Getter
 @Setter
 @ToString
 @Accessors(chain = true)
-@Table(name = "content") //指定 mongo collection
 public class Content {
 
     /**
-     * 指定主键 @Id或@BsonId.
+     * 指定主键
      */
     @BsonId
     private Long id;
@@ -52,5 +54,8 @@ public class Content {
 
     @BsonProperty("update_time")
     private LocalDateTime updateTime;
+
+    @BsonProperty
+    private List<String> tags;
 
 }
