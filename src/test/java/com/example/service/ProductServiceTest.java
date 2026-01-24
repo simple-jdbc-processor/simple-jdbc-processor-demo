@@ -62,8 +62,7 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() throws InterruptedException, IOException {
-        Table table = Product.class.getAnnotation(Table.class);
-        String tableName = table.name();
+        String tableName = "product";
         Map<String, IndexState> settings = elasticsearchClient.indices().getSettings().settings();
         IndexState product = settings.get(tableName);
         if (product == null) {
